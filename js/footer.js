@@ -43,8 +43,8 @@ function renderFooter(basePath = '') {
                     <h3 class="link-group-title">Support</h3>
                     <ul class="link-list">
                         <li><a href="${basePath}contact.html">Contact</a></li>
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="${basePath}pages/help.html">Help Center</a></li>
+                        <li><a href="${basePath}pages/privacy.html">Privacy Policy</a></li>
                         <li><a href="${basePath}pages/terms.html">Terms of Service</a></li>
                     </ul>
                 </div>
