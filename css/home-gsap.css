@@ -648,57 +648,150 @@
 }
 
 /* =========================================
-   8. LEADERBOARD PREVIEW
+   8. LEADERBOARD PREVIEW (UPDATED)
    ========================================= */
 .leaderboard-preview {
-    padding: 80px 0;
-    background: var(--bg-primary); /* UPDATED */
-    border-top: 1px solid var(--border-color); /* UPDATED */
+    padding: 100px 0;
+    background: var(--bg-primary);
+    border-top: 1px solid var(--border-color);
     display: flex; 
     flex-direction: column; 
     align-items: center;
 }
 
 .lb-grid {
-    width: 100%; max-width: 700px;
-    border: 1px solid var(--border-color); /* UPDATED */
-    background: var(--card-bg); /* UPDATED */
+    width: 100%; max-width: 800px; /* Wider for extra info */
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
     margin-top: 40px;
-    margin-bottom: 15px;
-    border-radius: 8px;
+    margin-bottom: 25px;
+    border-radius: 12px;
     overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.lb-header {
+    display: grid; 
+    grid-template-columns: 1fr 3fr 1.5fr;
+    padding: 15px 25px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 1.5px;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .lb-row {
     display: grid; 
-    grid-template-columns: 1fr 3fr 1fr;
-    padding: 18px 25px; 
-    border-bottom: 1px solid var(--border-color); /* UPDATED */
+    grid-template-columns: 1fr 3fr 1.5fr;
+    padding: 20px 25px; 
+    border-bottom: 1px solid var(--border-color);
     align-items: center;
+    transition: all 0.3s ease;
 }
 
 .lb-row:last-child { border-bottom: none; }
 
-.lb-row.head { 
-    background: var(--bg-secondary); /* UPDATED */
-    color: var(--text-secondary); /* UPDATED */
-    font-weight: bold; 
-    text-transform: uppercase; 
-    font-size: 0.85rem; 
-    letter-spacing: 1px;
+.lb-row:hover {
+    background: rgba(0, 170, 255, 0.03);
+    transform: scale(1.01);
 }
 
-.lb-row span:last-child { 
-    text-align: right; 
-    color: var(--accent-color); /* UPDATED */
-    font-weight: bold;
+/* Rank Styling */
+.lb-rank {
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
 }
 
-.lb-row.gold { border-left: 4px solid #ffd700; background: rgba(255, 215, 0, 0.05); }
-.lb-row.silver { border-left: 4px solid #c0c0c0; background: rgba(192, 192, 192, 0.05); }
-.lb-row.bronze { border-left: 4px solid #cd7f32; background: rgba(205, 127, 50, 0.05); }
+/* User & Perk Styling */
+.lb-user {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
 
-.lb-footer { color: var(--text-secondary); font-size: 0.9rem; } /* UPDATED */
+.lb-name {
+    font-weight: 700;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+}
+
+.lb-perk {
+    font-family: 'Segoe UI', sans-serif; /* Cleaner font for small text */
+    margin-top: 2px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* XP Styling */
+.lb-xp {
+    text-align: right;
+    color: var(--accent-color);
+    font-weight: 800;
+    font-size: 1.2rem;
+    text-shadow: 0 0 10px rgba(0, 170, 255, 0.2);
+}
+
+.xp-label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+}
+
+/* League Specifics */
+.lb-row.gold { border-left: 6px solid #ffd700; background: linear-gradient(90deg, rgba(255, 215, 0, 0.05), transparent); }
+.lb-row.silver { border-left: 6px solid #c0c0c0; background: linear-gradient(90deg, rgba(192, 192, 192, 0.05), transparent); }
+.lb-row.bronze { border-left: 6px solid #cd7f32; background: linear-gradient(90deg, rgba(205, 127, 50, 0.05), transparent); }
+
+/* Perks Legend */
+.league-perks-legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+    background: var(--card-bg);
+    padding: 15px 30px;
+    border-radius: 50px;
+    border: 1px solid var(--border-color);
+}
+
+.perk-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.perk-item strong {
+    color: var(--text-primary);
+}
+
+.perk-item .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.lb-footer {
+    color: var(--accent-color);
+    font-size: 0.9rem;
+    font-family: 'Courier New', monospace;
+    opacity: 0.8;
+}
+
+@media (max-width: 600px) {
+    .lb-header, .lb-row {
+        grid-template-columns: 0.5fr 3fr 1.5fr;
+        padding: 15px;
+    }
+    .lb-name { font-size: 1rem; }
+    .lb-xp { font-size: 1rem; }
+    .league-perks-legend { flex-direction: column; gap: 10px; border-radius: 12px; }
+}
 
 /* =========================================
    9. FUNCTIONAL GRID
