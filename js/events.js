@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         container.appendChild(card);
               <span class="view-icon"><i class="fa-solid fa-eye" aria-hidden="true"></i></span>
-    });
+              <span class="view-count" data-view-for="${eventId}">${formattedViews} view${viewCount === 1 && viewCount < 1000 ? '' : 's'}</span>
 
   /* ---------- Registration Modal Logic ---------- */
   (() => {
