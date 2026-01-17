@@ -30,16 +30,17 @@ const register = async (req, res, next) => {
         // 2. Find event
         let event = await Event.findOne({ where: { title: eventTitle }, transaction });
 
-        // If event doesn't exist in DB yet (first time it's being registered for), create it
+        // Get event data from JSON
+        const eventData = eventsData.find(e => e.title === eventTitle);
+
+        // If event doesn't exist in DB, create it
         if (!event) {
-            // Try to find event details from events.json
-            const eventData = eventsData.find(e => e.title === eventTitle);
             if (eventData) {
                 event = await Event.create({
                     title: eventTitle,
                     date: new Date(eventData.countdownDate),
                     location: eventData.location,
-                    capacity: 100 // Default capacity, can be adjusted
+                    capacity: 100
                 }, { transaction });
             } else {
                 // Fallback to placeholder if not found in JSON
@@ -48,6 +49,14 @@ const register = async (req, res, next) => {
                     date: new Date(),
                     location: 'To be announced',
                     capacity: 100
+                }, { transaction });
+            }
+        } else {
+            // If event exists but we have JSON data, update it to ensure correct date/location
+            if (eventData) {
+                await event.update({
+                    date: new Date(eventData.countdownDate),
+                    location: eventData.location
                 }, { transaction });
             }
         }
