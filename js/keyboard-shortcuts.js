@@ -96,17 +96,44 @@ class KeyboardShortcuts {
     document.addEventListener('focusout', () => {
       this.isInputFocused = false;
     });
+    
+    // Debug: Log all key presses to help troubleshoot
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '?' || e.key === '/' || e.key === 'Escape') {
+        console.log(`🔍 Debug - Raw key event: key="${e.key}", code="${e.code}", shiftKey=${e.shiftKey}`);
+      }
+    });
   }
 
   handleKeyDown(e) {
     // Skip if typing in input fields
-    if (this.isInputFocused) return;
+    if (this.isInputFocused) {
+      console.log('⏭️ Skipping shortcut - input field focused');
+      return;
+    }
     
-    const key = e.key.toLowerCase();
+    let key = e.key.toLowerCase();
+    
+    // Handle special case for ? key (Shift + /)
+    if (e.key === '?') {
+      key = '?';
+    }
+    
+    // Debug logging
+    if (this.shortcuts.has(key) || key === 'escape') {
+      console.log(`🔑 Key pressed: ${e.key} -> ${key} (registered: ${this.shortcuts.has(key)})`);
+    }
     
     // Handle escape immediately (no long press needed)
     if (key === 'escape') {
       this.shortcuts.get('escape').action();
+      return;
+    }
+    
+    // Handle ? and / immediately (no long press needed for help)
+    if (key === '?' || key === '/') {
+      e.preventDefault();
+      this.executeShortcut(key);
       return;
     }
     
@@ -118,7 +145,9 @@ class KeyboardShortcuts {
     
     // Start long press timer if not already pressed
     if (!this.pressedKeys.has(key)) {
+      console.log(`⏱️ Starting long press timer for: ${key}`);
       const timer = setTimeout(() => {
+        console.log(`✅ Long press activated for: ${key}`);
         this.executeShortcut(key);
         this.pressedKeys.delete(key);
       }, this.longPressDelay);
@@ -128,7 +157,12 @@ class KeyboardShortcuts {
   }
 
   handleKeyUp(e) {
-    const key = e.key.toLowerCase();
+    let key = e.key.toLowerCase();
+    
+    // Handle special case for ? key (Shift + /)
+    if (e.key === '?') {
+      key = '?';
+    }
     
     // Clear long press timer if key is released early
     if (this.pressedKeys.has(key)) {
@@ -138,10 +172,16 @@ class KeyboardShortcuts {
   }
 
   executeShortcut(key) {
+    console.log(`🎯 executeShortcut called with key: "${key}"`);
     const shortcut = this.shortcuts.get(key);
+    console.log('🔍 Shortcut found:', !!shortcut, shortcut?.description);
+    
     if (shortcut) {
+      console.log(`🚀 Executing shortcut: ${shortcut.description}`);
       shortcut.action();
       this.showShortcutFeedback(key, shortcut.description);
+    } else {
+      console.log(`❌ No shortcut found for key: "${key}"`);
     }
   }
 
@@ -206,13 +246,18 @@ class KeyboardShortcuts {
   }
 
   toggleHelpModal() {
+    console.log('🔧 toggleHelpModal called, current state:', this.helpModalOpen);
     const modal = document.getElementById('shortcuts-help-modal');
+    console.log('📋 Modal element found:', !!modal);
+    
     if (this.helpModalOpen) {
       modal.style.display = 'none';
       this.helpModalOpen = false;
+      console.log('❌ Help modal closed');
     } else {
       modal.style.display = 'flex';
       this.helpModalOpen = true;
+      console.log('✅ Help modal opened');
     }
   }
 
@@ -317,5 +362,17 @@ class KeyboardShortcuts {
 
 // Initialize keyboard shortcuts when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('🚀 Initializing keyboard shortcuts...');
   window.keyboardShortcuts = new KeyboardShortcuts();
+  console.log('✅ Keyboard shortcuts initialized successfully');
+  
+  // Debug: Test if shortcuts are working
+  setTimeout(() => {
+    if (window.keyboardShortcuts && window.keyboardShortcuts.shortcuts.size > 0) {
+      console.log(`📋 ${window.keyboardShortcuts.shortcuts.size} keyboard shortcuts registered`);
+      console.log('💡 Press ? or / to see all shortcuts, or hold H/E/P/A/C/J/L/T/F for 0.5s');
+    } else {
+      console.error('❌ Keyboard shortcuts failed to initialize');
+    }
+  }, 1000);
 });
